@@ -331,6 +331,98 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     document.head.appendChild(style);
     
+    // Chatbot functionality
+    const chatbot = document.getElementById('chatbot');
+    const chatbotOpen = document.getElementById('chatbot-open');
+    const chatbotToggle = document.getElementById('chatbot-toggle');
+    const chatbotInput = document.getElementById('chatbot-input');
+    const chatbotSend = document.getElementById('chatbot-send');
+    const chatbotMessages = document.getElementById('chatbot-messages');
+    
+    // Chatbot responses
+    const chatbotResponses = {
+        'hello': 'Yo! What\'s good? Welcome to RTU! 🎵',
+        'hi': 'Hey there! Ready to dive into the underground?',
+        'contact': 'You can reach us at rtuworldwide@gmail.com or call (602) 413-7236. We\'re located at 6832 N. 24th Dr., Phoenix, AZ 85015.',
+        'address': 'We\'re at 6832 N. 24th Dr., Phoenix, AZ 85015. Come check us out!',
+        'phone': 'Hit us up at (602) 413-7236',
+        'email': 'Email us at rtuworldwide@gmail.com',
+        'events': 'Check out our RTU Live section for upcoming events and the April Phoenix Hip Hop Fest!',
+        'music': 'We showcase the best underground hip hop artists. Check out our RTU TV and Music Videos sections!',
+        'artist': 'Want to perform? Check out our Artist Registration section to submit your music!',
+        'radio': 'RTU Radio is where the real underground sound lives. Tune in for the latest tracks!',
+        'shop': 'Check out our shop for RTU merchandise and exclusive underground gear!',
+        'help': 'I can help you with info about events, contact details, artist registration, and more. Just ask!',
+        'default': 'That\'s dope! For more info, check out our website sections or ask me about events, contact info, or artist registration!'
+    };
+    
+    // Open chatbot
+    chatbotOpen.addEventListener('click', function() {
+        chatbot.classList.add('open');
+        chatbotOpen.classList.add('hidden');
+        chatbotInput.focus();
+    });
+    
+    // Close chatbot
+    chatbotToggle.addEventListener('click', function() {
+        chatbot.classList.remove('open');
+        chatbotOpen.classList.remove('hidden');
+    });
+    
+    // Send message
+    function sendMessage() {
+        const message = chatbotInput.value.trim();
+        if (message) {
+            addMessage(message, 'user');
+            chatbotInput.value = '';
+            
+            // Simulate bot response
+            setTimeout(() => {
+                const response = getBotResponse(message);
+                addMessage(response, 'bot');
+            }, 1000);
+        }
+    }
+    
+    // Send button click
+    chatbotSend.addEventListener('click', sendMessage);
+    
+    // Enter key press
+    chatbotInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+    
+    // Add message to chat
+    function addMessage(text, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}-message`;
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'message-content';
+        contentDiv.innerHTML = `<p>${text}</p>`;
+        
+        messageDiv.appendChild(contentDiv);
+        chatbotMessages.appendChild(messageDiv);
+        
+        // Scroll to bottom
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    }
+    
+    // Get bot response
+    function getBotResponse(message) {
+        const lowerMessage = message.toLowerCase();
+        
+        for (const [key, response] of Object.entries(chatbotResponses)) {
+            if (lowerMessage.includes(key)) {
+                return response;
+            }
+        }
+        
+        return chatbotResponses.default;
+    }
+    
     // Initialize page
     console.log('RTU Website loaded successfully!');
     
